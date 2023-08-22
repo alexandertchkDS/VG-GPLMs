@@ -41,3 +41,8 @@ def create_txt_files(csv_file_path, dataset_path):
 
     print("File desc.tok.txt has been created!")
     print("File trans.tok.txt has been created!")
+    
+    
+# Directory containing your .mp4 files
+video_directory = '/home/ubuntu/Project/VG-GPLMs/source_data/sample_youtube_videos_500/'
+rename_files(video_directory)

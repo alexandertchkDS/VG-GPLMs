@@ -61,3 +61,4 @@ yarl==1.9.2
 zipp==3.16.2
 torchvision==0.9.1
 av==10.0.0
+opencv-python==4.8.0.76
