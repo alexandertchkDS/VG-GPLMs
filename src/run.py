@@ -122,21 +122,34 @@ if __name__ == '__main__':
     # make trainer
     if args.checkpoint == 'None':
         args.checkpoint = None
+    # trainer = Trainer(deterministic=True,
+    #                   num_sanity_val_steps=10,
+    #                   resume_from_checkpoint=args.checkpoint,
+    #                   logger=logger,
+    #                   gpus=args.gpus,
+    #                   distributed_backend='ddp',
+    #                   plugins=DDPPlugin(find_unused_parameters=False),
+    #                   gradient_clip_val=1.0,
+    #                   max_epochs=args.num_epochs,
+    #                   limit_val_batches=args.limit_val_batches,
+    #                   val_check_interval=args.val_check_interval,
+    #                   accumulate_grad_batches=args.grad_accumulate,
+    #                   fast_dev_run=False,
+    #                   callbacks=[checkpoint_callback])
+    
     trainer = Trainer(deterministic=True,
-                      num_sanity_val_steps=10,
-                      resume_from_checkpoint=args.checkpoint,
-                      logger=logger,
-                      gpus=args.gpus,
-                      distributed_backend='ddp',
-                      plugins=DDPPlugin(find_unused_parameters=False),
-                      gradient_clip_val=1.0,
-                      max_epochs=args.num_epochs,
-                      limit_val_batches=args.limit_val_batches,
-                      val_check_interval=args.val_check_interval,
-                      accumulate_grad_batches=args.grad_accumulate,
-                      fast_dev_run=False,
-                      callbacks=[checkpoint_callback])
-
+                  #num_sanity_val_steps=10,
+                  resume_from_checkpoint=args.checkpoint,
+                  logger=logger,
+                  gpus=args.gpus,
+                  gradient_clip_val=1.0,
+                  max_epochs=args.num_epochs,
+                  limit_val_batches=args.limit_val_batches,
+                  val_check_interval=args.val_check_interval,
+                  accumulate_grad_batches=args.grad_accumulate,
+                  fast_dev_run=False,
+                  callbacks=[checkpoint_callback])
+    
     # make dataloader & model
     summary_data = SummaryDataModule(args)
     if args.model == 'text_only_bart':

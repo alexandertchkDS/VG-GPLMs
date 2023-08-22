@@ -47,16 +47,6 @@ class BaseModel(pl.LightningModule):
         if self.args.img_lr_factor != 1 and self.args.model=='multi_modal_bart':
             # make parameter groups
             all_para = [p for p in self.model.parameters()]
-            # img_related_para = [p for p in self.model.model.encoder.img_transformer.parameters()] \
-            #                   +[p for p in self.model.model.encoder.img_feature_transfers.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fcs.parameters()] \
-            #                   +[p for p in self.model.model.encoder.final_layer_norm.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fgs.parameters()]
-
-            # img_related_para = [p for p in self.model.model.encoder.img_feature_transfers.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fcs.parameters()] \
-            #                   +[p for p in self.model.model.encoder.final_layer_norm.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fgs.parameters()]
 
             _img_related_para = []
             if self.args.cross_attn_type == 0:
@@ -123,16 +113,6 @@ class BaseModel(pl.LightningModule):
         elif self.args.img_lr_factor != 1 and self.args.model=='multi_modal_t5':
              # make parameter groups
             all_para = [p for p in self.model.parameters()]
-            # img_related_para = [p for p in self.model.model.encoder.img_transformer.parameters()] \
-            #                   +[p for p in self.model.model.encoder.img_feature_transfers.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fcs.parameters()] \
-            #                   +[p for p in self.model.model.encoder.final_layer_norm.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fgs.parameters()]
-
-            # img_related_para = [p for p in self.model.model.encoder.img_feature_transfers.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fcs.parameters()] \
-            #                   +[p for p in self.model.model.encoder.final_layer_norm.parameters()] \
-            #                   +[p for p in self.model.model.encoder.fgs.parameters()]
 
             _img_related_para = []
             if self.args.cross_attn_type == 0:
@@ -196,14 +176,10 @@ class BaseModel(pl.LightningModule):
                 {'params': img_related_para, 'lr': self.learning_rate * self.args.img_lr_factor},
             ], lr=self.learning_rate)
             print('LEARNING RATE SET SUCCESSFUL')
-            print('LEARNING RATE SET SUCCESSFUL')
-            print('LEARNING RATE SET SUCCESSFUL')
-            print('LEARNING RATE SET SUCCESSFUL')
-            print('LEARNING RATE SET SUCCESSFUL')
-            print('LEARNING RATE SET SUCCESSFUL')
-            print('LEARNING RATE SET SUCCESSFUL')
         else:
             optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
         # return optimizer
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.args.scheduler_lambda1, gamma=self.args.scheduler_lambda2)
+        print(f"optimizer: {optimizer}")
+        print(f"scheduler: {scheduler}\n\n\n")
         return [optimizer], [scheduler]

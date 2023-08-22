@@ -2,6 +2,7 @@ from models.base_model import BaseModel
 from transformers import T5Tokenizer
 from transformers import T5ForConditionalGeneration
 from models.modeling_t5 import T5ForMultiModalGeneration
+from transformers import T5Config
 from datasets import load_metric
 
 class T5Origin(BaseModel):
@@ -9,8 +10,8 @@ class T5Origin(BaseModel):
     def __init__(self,args):
         self.args = args
         super(T5Origin, self).__init__(args)
-        self.model = T5ForConditionalGeneration.from_pretrained('t5-base')
-        self.tokenizer = T5Tokenizer.from_pretrained('t5-base')
+        self.model = T5ForConditionalGeneration.from_pretrained('mt5-base')
+        self.tokenizer = T5Tokenizer.from_pretrained('mt5-base')
         self.rouge = load_metric('rouge', experiment_id=self.args.log_name)
 
     def forward(self, input_ids, attention_mask, decoder_input_ids, labels):
@@ -95,14 +96,14 @@ class T5MultiModal(BaseModel):
     def __init__(self, args):
         self.args = args
         super(T5MultiModal, self).__init__(args)
-        self.model = T5ForMultiModalGeneration.from_pretrained('t5-base',
+        self.model = T5ForMultiModalGeneration.from_pretrained('google/mt5-base',
                                                                  fusion_layer=args.fusion_layer,
                                                                  use_img_trans=args.use_img_trans,
                                                                  use_forget_gate=args.use_forget_gate,
                                                                  cross_attn_type=args.cross_attn_type,
                                                                  dim_common=args.dim_common,
                                                                  n_attn_heads=args.n_attn_heads)
-        self.tokenizer = T5Tokenizer.from_pretrained('t5-base')
+        self.tokenizer = T5Tokenizer.from_pretrained('google/mt5-base')
         self.rouge = load_metric('rouge', experiment_id=self.args.log_name)
 
     def forward(self, input_ids, attention_mask, decoder_input_ids, labels, image_features, image_len):
