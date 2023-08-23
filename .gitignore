@@ -133,3 +133,4 @@ dmypy.json
 dataset/
 dataset-prod/
 lightning_logs/
+Sample_data-small/

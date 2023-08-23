@@ -7,23 +7,29 @@ import os
 import time
 import gc
 gc.collect()
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
 
 def extract_frames_torchvision(video_path, output_folder):
     current_time = time.time()
     # Read video
     video_tensor, _, _ = io.read_video(video_path, pts_unit="sec")
-    
     # Load the pre-trained r3d_18 model
     model = r3d_18(pretrained=True)
     model = model.to("cuda" if torch.cuda.is_available() else "cpu")
     model.eval()
+    
+    model = torch.nn.Sequential(
+    *(list(model.children())[:-1]))
 
     # Remove the classification head to get features before the fully connected layer
-    model = torch.nn.Sequential(
-    *(list(model.children())[:-1]),  # Everything except the last fc layer
-    nn.Flatten(),  # Flatten the (B, 512, 1, 1, 1) tensor to (B, 512)
-    nn.Linear(512, 2048)  # Expand dimensions from 512 to 2048
-    ).to("cuda" if torch.cuda.is_available() else "cpu")
+    # model = torch.nn.Sequential(
+    # *(list(model.children())[:-1]),  # Everything except the last fc layer
+    # nn.Flatten(),  # Flatten the (B, 512, 1, 1, 1) tensor to (B, 512)
+    # nn.Linear(512, 2048)  # Expand dimensions from 512 to 2048
+    # ).to("cuda" if torch.cuda.is_available() else "cpu")
+
 
     # Split the tensor into chunks of 16 frames each
     split_video_tensor = video_tensor.split(16, dim=0)
@@ -33,7 +39,6 @@ def extract_frames_torchvision(video_path, output_folder):
     with torch.no_grad():
         for chunk in split_video_tensor:
             chunk = chunk.float().div(255.0)
-            
             if chunk.size(0) != 16:  # Ensuring the chunk has 16 frames
                 continue
             
@@ -55,7 +60,7 @@ def extract_frames_torchvision(video_path, output_folder):
         all_features = all_features.cpu()
     all_features = all_features.numpy()
 
-    videofile_name = os.path.basename(video_path)
+    videofile_name = os.path.splitext(os.path.basename(video_path))[0]
     output_path = os.path.join(output_folder, videofile_name)
     os.makedirs(output_folder, exist_ok=True)
     np.save(output_path, all_features)
@@ -63,9 +68,7 @@ def extract_frames_torchvision(video_path, output_folder):
     print(f"Total time: {time.time() - current_time:.0f}")
 
 # Directory containing your .mp4 files
-video_directory = '/home/ubuntu/Project/VG-GPLMs/source_data/sample_youtube_videos_500/'
-video_file_name = 'mXb6-AC5QJQ.mp4'
-video_path = os.path.join(video_directory, video_file_name)
+video_path = '/home/ubuntu/Project/VG-GPLMs/Sample_data-small/video_dataset_4_files/-KXlKcGaMMo.mp4'
 output_folder = '/home/ubuntu/Project/VG-GPLMs/dataset/video_features/'
 extract_frames_torchvision(video_path, output_folder)
 
