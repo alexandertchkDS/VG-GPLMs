@@ -1,12 +1,12 @@
 python ./src/run.py \
         -model=multi_modal_bart \
-        -train_src_path=./dataset/sum_all/train_tran.tok.txt \
-        -train_tgt_path=./dataset/sum_all/train_desc.tok.txt \
-        -val_src_path=./dataset/sum_all/val_tran.tok.txt \
-        -val_tgt_path=./dataset/sum_all/val_desc.tok.txt \
-        -test_src_path=./dataset/sum_all/test_tran.tok.txt \
-        -test_tgt_path=./dataset/sum_all/test_desc.tok.txt \
-        -image_feature_path=./dataset/video_action_features/ \
+        -train_src_path=./dataset/train_tran.tok.txt \
+        -train_tgt_path=./dataset/train_desc.tok.txt \
+        -val_src_path=./dataset/val_tran.tok.txt \
+        -val_tgt_path=./dataset/val_desc.tok.txt \
+        -test_src_path=./dataset/test_tran.tok.txt \
+        -test_tgt_path=./dataset/test_desc.tok.txt \
+        -image_feature_path=./dataset/video_features/ \
         -val_save_file=./evaluation/temp_valid_file \
         -test_save_file=./evaluation/results/summaries.txt \
         -log_name=multi_modal_bart \

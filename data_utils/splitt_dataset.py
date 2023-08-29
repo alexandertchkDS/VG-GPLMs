@@ -61,7 +61,7 @@ def load_and_split_data(dataset_folder):
     write_data(test_desc_data, os.path.join(dataset_folder, "test_desc.tok.txt"))
 
 # Create the directory if it doesn't exist
-dataset_folder = "/home/alexandertchk/VSCode/multimodal/VG-GPLMs/dataset-prod/text"
+dataset_folder = "/home/ubuntu/Project/VG-GPLMs/dataset/"
 if not os.path.exists(dataset_folder):
     os.makedirs(dataset_folder)
 
